@@ -153,3 +153,6 @@ corr_matrix["median_house_value"].sort_values(ascending=False)
 # So focus on only 4 main attributes that seem most correlated with the median housing value
 attributes = ["median_house_value", "median_income", "total_rooms", "housing_median_age"]
 scatter_matrix(housing[attributes], figsize=(12,8))
+
+# From above scatter matrix, it looks like the most important attribute to predict the median house value is median income so zoom in on its correlation scatterplot
+housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
