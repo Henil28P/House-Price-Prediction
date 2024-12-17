@@ -133,3 +133,14 @@ housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
              c="median_house_value", cmap=plt.get_cmap("jet"), colorbar=True,
 )
 plt.legend()
+
+# 2. Looking for Correlations
+
+# Select only numerical columns for correlation
+numerical_housing = housing.select_dtypes(include=[np.number])
+
+# Compute the 'standard correlation coefficient' (Pearsons's r) between every pair of attributes using the corr() method
+corr_matrix = numerical_housing.corr()
+
+# display the correlation matrix
+corr_matrix["median_house_value"].sort_values(ascending=False)
