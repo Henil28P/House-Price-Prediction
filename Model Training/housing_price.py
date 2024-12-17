@@ -123,4 +123,4 @@ housing = strat_train_set.copy()
 
 # 1. Visualising Geographical data
 # Create a scatterplot of all districts to visualise the data since there is geographical info (latitude and longitude attributes)
-housing.plot(kind="scatter", x="longitude", y="latitude")
+housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1) # alpha=0.1 makes it easier to visualise the places where there is a high density of data points
