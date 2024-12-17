@@ -27,3 +27,16 @@ from six.moves import urllib
 DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml/master/"
 HOUSING_PATH = os.path.join(os.path.abspath(".."), "datasets", "housing")
 HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+
+# Function to fetch the housing data - automating this process to install the dataset on multiple machines
+def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+    os.makedirs(housing_path, exist_ok=True) # target directory
+    tgz_path = os.path.join(housing_path, "housing.tgz") # define download path
+    urllib.request.urlretrieve(housing_url, tgz_path) #  download path
+    housing_tgz = tarfile.open(tgz_path) # open the downloaded tar file
+    housing_tgz.extractall(path=housing_path) # extract the tarball to housing_path
+    housing_tgz.close() # close the tar file
+
+# When calling the above function, it creates a datasets/housing directory in the project (outside Model Training directory),
+# downloads the 'housing.tgz' file and extracts the 'housing.csv' file from it in this directory
+fetch_housing_data()
