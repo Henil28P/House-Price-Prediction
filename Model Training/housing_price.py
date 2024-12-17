@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split # $ pip install scikit-learn
 from sklearn.model_selection import StratifiedShuffleSplit
+from pandas.plotting import scatter_matrix
 # import seaborn as sbn
 import os
 import tarfile
@@ -144,3 +145,11 @@ corr_matrix = numerical_housing.corr()
 
 # display the correlation matrix
 corr_matrix["median_house_value"].sort_values(ascending=False)
+
+# Another way to check the correlation between attributes is to use pandas scatter_matrix() function
+# It plots every numerical attribute against every other numerical attribute.
+
+# 11 numerical attributes = 11^2=121 plots will not fit on a page
+# So focus on only 4 main attributes that seem most correlated with the median housing value
+attributes = ["median_house_value", "median_income", "total_rooms", "housing_median_age"]
+scatter_matrix(housing[attributes], figsize=(12,8))
