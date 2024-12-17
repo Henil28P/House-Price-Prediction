@@ -110,3 +110,7 @@ for train_index, test_index in split.split(housing, housing["income_cat"]):
 
 # Checks the proportion of each income category in the stratified test set
 strat_test_set["income_cat"].value_counts() / len(strat_test_set)
+
+# Remove the income_cat attribute so the data is back to its original state
+for set_ in (strat_train_set, strat_test_set):
+    set_.drop("income_cat", axis=1, inplace=True)
