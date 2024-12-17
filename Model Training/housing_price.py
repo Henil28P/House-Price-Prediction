@@ -88,3 +88,14 @@ train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
 # Check the amount of districts (data points) for each of the 2 sets
 len(train_set) # 80% of overall data = 16512
 len(test_set) # 20% of overall data = 4128
+
+# Suppose the median_income attribute (continuous numerical) is very important to predict median housing prices
+# Create an income category attribute with 5 categories labelled from 1 to 5
+housing["income_cat"] = pd.cut(housing["median_income"],
+                                       bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
+                                       labels=[1,2,3,4,5])
+
+# np.inf is NumPy's way to consider all income values above $60,000 to infinity
+
+# Plot histogram of income categories
+housing["income_cat"].hist()
