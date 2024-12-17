@@ -114,3 +114,9 @@ strat_test_set["income_cat"].value_counts() / len(strat_test_set)
 # Remove the income_cat attribute so the data is back to its original state
 for set_ in (strat_train_set, strat_test_set):
     set_.drop("income_cat", axis=1, inplace=True)
+
+################################## Part 3 - Discover and Visualise the Data to Gain Insights ###################################
+
+# Firstly, put the test set aside and explore the training set
+# Create a copy so that you can play with it without harming the training set
+housing = strat_train_set.copy()
