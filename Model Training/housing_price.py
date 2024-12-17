@@ -49,6 +49,10 @@ def load_housing_data(housing_path=HOUSING_PATH):
 housing = load_housing_data()
 housing.head() # output the first 5 rows of the data as a Pandas DataFrame
 
+# Each row represents 1 district.
+# There are 10 attributes (longitude, latitude, housing_median_age, total_rooms, total_bedrooms,
+# population, households, median_income, median_house_value, and ocean_proximity)
+
 # Note: If you get the error "SSLCertVerificationError: certificate verify failed",
 # This is because Python cannot verify the SSL certificate of the URL you're trying to access.
 # This issue is often due to missing or outdated SSL certificates on your system or specific configurations in your Python environment
