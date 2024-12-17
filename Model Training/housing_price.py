@@ -15,3 +15,15 @@ import matplotlib as plt
 import os
 import tarfile
 from six.moves import urllib
+
+# If running this script as a Jupyter notebook by cell breakpoints, then you might need to run the following installation commands on a separate cell:
+# $ !pip install <library> (to run in a shell as a command)
+# OR
+# $ %pip install <library> (provided by IPython kernel)
+# There are different limitations and purposes for installing with ! and %
+# For the purpose of this project, these libraries and dependencies have been installed separately on a terminal in an active virtual environment
+
+# Initialise important files and paths
+DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml/master/"
+HOUSING_PATH = os.path.join(os.path.abspath(".."), "datasets", "housing")
+HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
