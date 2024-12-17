@@ -60,3 +60,5 @@ housing.head() # output the first 5 rows of the data as a Pandas DataFrame
 # Solution for Mac: Run the command $ /Applications/Python\ 3.x/Install\ Certificates.command on the terminal
 # For this command, replace 'x' with the version of the Python you are using currently such as 3.11
 # The above command installs/updates your Python SSL certificate in your Mac machine
+
+housing.info() # get a quick description of the housing data
