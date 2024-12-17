@@ -156,3 +156,18 @@ scatter_matrix(housing[attributes], figsize=(12,8))
 
 # From above scatter matrix, it looks like the most important attribute to predict the median house value is median income so zoom in on its correlation scatterplot
 housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
+
+
+# 3. Experimenting with Attribute Combinations
+
+# Before preparing the data for ML algorithms, try various attribute combinations
+
+# eg. total rooms in a district is not useful if you don't know how many households there are, so you want total rooms per household
+housing["rooms_per_household"] = housing["total_rooms"]/housing["households"]
+housing["bedrooms_per_room"] = housing["total_bedrooms"]/housing["total_rooms"]
+housing["population_per_household"] = housing["population"]/housing["households"]
+
+# look at correlation matrix again
+numerical_housing = housing.select_dtypes(include=[np.number])
+corr_matrix = numerical_housing.corr()
+corr_matrix["median_house_value"].sort_values(ascending=False)
