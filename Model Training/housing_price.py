@@ -40,3 +40,11 @@ def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
 # When calling the above function, it creates a datasets/housing directory in the project (outside Model Training directory),
 # downloads the 'housing.tgz' file and extracts the 'housing.csv' file from it in this directory
 fetch_housing_data()
+
+# Function for loading the data using Pandas
+def load_housing_data(housing_path=HOUSING_PATH):
+    csv_path = os.path.join(housing_path, "housing.csv")
+    return pd.read_csv(csv_path) # returns a pandas DataFrame object containing all the data
+
+housing = load_housing_data()
+housing.head() # output the first 5 rows of the data as a Pandas DataFrame
