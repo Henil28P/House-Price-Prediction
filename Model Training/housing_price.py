@@ -48,3 +48,11 @@ def load_housing_data(housing_path=HOUSING_PATH):
 
 housing = load_housing_data()
 housing.head() # output the first 5 rows of the data as a Pandas DataFrame
+
+# Note: If you get the error "SSLCertVerificationError: certificate verify failed",
+# This is because Python cannot verify the SSL certificate of the URL you're trying to access.
+# This issue is often due to missing or outdated SSL certificates on your system or specific configurations in your Python environment
+
+# Solution for Mac: Run the command $ /Applications/Python\ 3.x/Install\ Certificates.command on the terminal
+# For this command, replace 'x' with the version of the Python you are using currently such as 3.11
+# The above command installs/updates your Python SSL certificate in your Mac machine
