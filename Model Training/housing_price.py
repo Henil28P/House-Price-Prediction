@@ -62,3 +62,7 @@ housing.head() # output the first 5 rows of the data as a Pandas DataFrame
 # The above command installs/updates your Python SSL certificate in your Mac machine
 
 housing.info() # get a quick description of the housing data
+
+# The field "ocean_proximity" is not numerical like others, its type is "Object"
+# Check how many districts belong to each category of the attribute "ocean_proximity"
+housing["ocean proximity"].value_counts()
