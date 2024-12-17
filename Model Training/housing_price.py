@@ -120,3 +120,7 @@ for set_ in (strat_train_set, strat_test_set):
 # Firstly, put the test set aside and explore the training set
 # Create a copy so that you can play with it without harming the training set
 housing = strat_train_set.copy()
+
+# 1. Visualising Geographical data
+# Create a scatterplot of all districts to visualise the data since there is geographical info (latitude and longitude attributes)
+housing.plot(kind="scatter", x="longitude", y="latitude")
