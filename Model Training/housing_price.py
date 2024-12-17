@@ -107,3 +107,6 @@ for train_index, test_index in split.split(housing, housing["income_cat"]):
     # Extract the rows corresponding to the training and test indices
     strat_train_set = housing.loc[train_index]
     strat_test_set = housing.loc[test_index]
+
+# Checks the proportion of each income category in the stratified test set
+strat_test_set["income_cat"].value_counts() / len(strat_test_set)
