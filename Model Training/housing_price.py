@@ -65,4 +65,4 @@ housing.info() # get a quick description of the housing data
 
 # The field "ocean_proximity" is not numerical like others, its type is "Object"
 # Check how many districts belong to each category of the attribute "ocean_proximity"
-housing["ocean proximity"].value_counts()
+housing["ocean_proximity"].value_counts()
