@@ -10,7 +10,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-# import sklearn as skl
+from sklearn.model_selection import train_test_split # $ pip install scikit-learn
 # import seaborn as sbn
 import os
 import tarfile
@@ -74,3 +74,17 @@ housing.describe()
 # For this script and project, the command $ pip install matplotlib was used in a Python virtual environment
 housing.hist(bins=50, figsize=(20,15)) # hist() to plot a histogram for each numerical attribute
 plt.show()
+
+############################## Part 2 - Create a test set ############################################
+
+# This involves picking some instances randomly and set them aside (ie. 20% of dataset or less if the dataset is very large)
+
+# --> $ pip install scikit-learn to install it on normal terminal while being in a virtual environment
+# --> $ %pip install scikit-learn to install it in a Jupyter notebook for using sklearn dependencies in any cell
+
+# Use train_test_split of sklearn module to split the data into 20% test and 80% train
+train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
+
+# Check the amount of districts (data points) for each of the 2 sets
+len(train_set) # 80% of overall data = 16512
+len(test_set) # 20% of overall data = 4128
