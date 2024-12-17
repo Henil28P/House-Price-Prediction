@@ -9,7 +9,7 @@
 
 import pandas as pd
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 # import sklearn as skl
 # import seaborn as sbn
 import os
@@ -69,3 +69,8 @@ housing["ocean_proximity"].value_counts()
 
 # Use the describe() method to see the summary of the numerical attributes
 housing.describe()
+
+# Use %matplotlib inline to run in a separate cell in a Jupyter notebook environment (not in a script) as it tells Jupyter to set up Matplotlib using Jupyter's own backend
+# For this script and project, the command $ pip install matplotlib was used in a Python virtual environment
+housing.hist(bins=50, figsize=(20,15)) # hist() to plot a histogram for each numerical attribute
+plt.show()
