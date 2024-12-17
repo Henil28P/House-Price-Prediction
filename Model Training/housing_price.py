@@ -1,0 +1,1 @@
+# This script is for training the House Price Prediction model
