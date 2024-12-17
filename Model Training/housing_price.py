@@ -124,3 +124,12 @@ housing = strat_train_set.copy()
 # 1. Visualising Geographical data
 # Create a scatterplot of all districts to visualise the data since there is geographical info (latitude and longitude attributes)
 housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1) # alpha=0.1 makes it easier to visualise the places where there is a high density of data points
+
+# Make the patterns more stand out by adding more parameters and colourfully visualise 'median_house_value'
+# 's' (the radius of each circle) shows the district's population, 'c' (color) represents the price,
+# 'cmap' to use a predefined color map (ie. 'jet') and it ranges from blue (low values) to red (high prices)
+housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
+             s=housing["population"]/100, label="population", figsize=(10,7),
+             c="median_house_value", cmap=plt.get_cmap("jet"), colorbar=True,
+)
+plt.legend()
