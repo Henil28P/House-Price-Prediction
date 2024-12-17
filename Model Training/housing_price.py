@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split # $ pip install scikit-learn
+from sklearn.model_selection import StratifiedShuffleSplit
 # import seaborn as sbn
 import os
 import tarfile
@@ -99,3 +100,10 @@ housing["income_cat"] = pd.cut(housing["median_income"],
 
 # Plot histogram of income categories
 housing["income_cat"].hist()
+
+# Perform stratified sampling based on the income category using Scikit-Learn's StratifiedShuffleSplit class imported earlier
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+for train_index, test_index in split.split(housing, housing["income_cat"]):
+    # Extract the rows corresponding to the training and test indices
+    strat_train_set = housing.loc[train_index]
+    strat_test_set = housing.loc[test_index]
