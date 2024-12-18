@@ -225,6 +225,20 @@ def data_cleaning(housing):
 
     # Create a copy of the data without the text attribute "ocean_proximity" since median can only be computer on numerical attributes
     housing_num = housing.drop("ocean_proximity", axis=1)
+    housing_num = housing_num.drop("income_cat", axis=1)
 
     # Fit the 'imputer' instance to the training data using fit() method
     imputer.fit(housing_num)
+
+    # Median is now stored in the 'statistics_' instance variable by 'imputer'
+    imputer.statistics_
+    housing_num.median().values
+
+    # Use the trained imputer to transform the training set by replacing missing values with the learned median
+    X = imputer.transform(housing_num)
+
+    # Convert the above NumPy array result of transformed features to Pandas DataFrame
+    housing_tr = pd.DataFrame(X, columns=housing_num.columns, index=housing_num.index)
+    return housing_tr
+
+data_cleaning(housing)
