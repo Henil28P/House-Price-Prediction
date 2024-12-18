@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split # $ pip install scikit-lear
 from sklearn.model_selection import StratifiedShuffleSplit
 from pandas.plotting import scatter_matrix
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OrdinalEncoder
 # import seaborn as sbn
 import os
 import tarfile
@@ -242,3 +243,20 @@ def data_cleaning(housing):
     return housing_tr
 
 data_cleaning(housing)
+
+def handle_text_attributes(housing):
+
+    housing_cat = housing[["ocean_proximity"]] # [[]] as OrdinalEncoder requires 2D input (a DataFrame or a 2-D array)
+    housing_cat.head(10) # output first 10 rows of "ocean_proximity" categorical attribute
+
+    # As most ML algorithms prefer to work with numbers,
+    # 1. Ordinal Encoding: use sklearn's OrdinalEncoder class of its 'preprocessing' module to convert the above categorical values from text to numbers
+    ordinal_encoder = OrdinalEncoder()
+    housing_cat_encoded = ordinal_encoder.fit_transform(housing_cat)
+    housing_cat_encoded[:10]
+
+    # get list of categories which is a list containing a 1D array of categories for each categoricaal attribute
+    return ordinal_encoder.categories_
+    # return ordinal_encoder
+
+handle_text_attributes(housing)
