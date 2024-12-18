@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split # $ pip install scikit-learn
 from sklearn.model_selection import StratifiedShuffleSplit
 from pandas.plotting import scatter_matrix
+from sklearn.impute import SimpleImputer
 # import seaborn as sbn
 import os
 import tarfile
@@ -127,7 +128,6 @@ def stratified_sampling(housing):
         # set_ = housing[some_condition].copy()
         set_ = set_.drop("income_cat", axis=1)
 
-
     return strat_train_set, strat_test_set
 
 strat_train_set, strat_test_set = stratified_sampling(housing)
@@ -202,3 +202,29 @@ attribute_combinations(housing)
 
 
 ################################ Part 4 - Prepare the Data for Machine Learning Algorithms ###################################
+
+# Revert to a clean training set
+housing = strat_train_set.drop("median_house_value", axis=1)
+# ==> Note: .drop() creates a copy of the data and does not affect 'strat_train_set'
+
+# Separate the predictors and labels to not apply same transformationss to the predictors and the target values
+housing_labels = strat_train_set["median_house_value"].copy()
+
+
+def data_cleaning(housing):
+    # Most ML algorithms don't work with missing features, in this, total_bedrooms attribute has some missing values
+
+    # Option 1: get rid of the corresponding districts which have missing values: housing.dropna(subset=["total_bedrooms"])
+    # Option 2: get rid of the entire attribute: housing.drop("total_bedrooms", axis=1)
+    # Option 3: set the missing values to some value (0,mean,median) - impute it
+    # median = housing["total_bedrooms"].median()
+    # housing.fillna({"total_bedrooms": median}, inplace=True)
+
+    # Apart from all the above manual options, use sklearn's SimpleImputer class from its 'impute' module
+    imputer = SimpleImputer(strategy="median") # replace each attribute's missing value with its "median"
+
+    # Create a copy of the data without the text attribute "ocean_proximity" since median can only be computer on numerical attributes
+    housing_num = housing.drop("ocean_proximity", axis=1)
+
+    # Fit the 'imputer' instance to the training data using fit() method
+    imputer.fit(housing_num)
