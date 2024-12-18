@@ -49,11 +49,6 @@ def load_housing_data(housing_path=HOUSING_PATH):
     return pd.read_csv(csv_path) # returns a pandas DataFrame object containing all the data
 
 housing = load_housing_data()
-housing.head() # output the first 5 rows of the data as a Pandas DataFrame
-
-# Each row represents 1 district.
-# There are 10 attributes (longitude, latitude, housing_median_age, total_rooms, total_bedrooms,
-# population, households, median_income, median_house_value, and ocean_proximity)
 
 # Note: If you get the error "SSLCertVerificationError: certificate verify failed",
 # This is because Python cannot verify the SSL certificate of the URL you're trying to access.
@@ -63,19 +58,27 @@ housing.head() # output the first 5 rows of the data as a Pandas DataFrame
 # For this command, replace 'x' with the version of the Python you are using currently such as 3.11
 # The above command installs/updates your Python SSL certificate in your Mac machine
 
-housing.info() # get a quick description of the housing data
+# Each row represents 1 district.
+# There are 10 attributes (longitude, latitude, housing_median_age, total_rooms, total_bedrooms,
+# population, households, median_income, median_house_value, and ocean_proximity)
+def review_data(housing):
+    housing.head() # output the first 5 rows of the data as a Pandas DataFrame
 
-# The field "ocean_proximity" is not numerical like others, its type is "Object"
-# Check how many districts belong to each category of the attribute "ocean_proximity"
-housing["ocean_proximity"].value_counts()
+    housing.info() # get a quick description of the housing data
 
-# Use the describe() method to see the summary of the numerical attributes
-housing.describe()
+    # The field "ocean_proximity" is not numerical like all the others, its type is "Object"
+    # Check how many districts belong to each category of the attribute "ocean_proximity"
+    housing["ocean_proximity"].value_counts()
 
-# Use %matplotlib inline to run in a separate cell in a Jupyter notebook environment (not in a script) as it tells Jupyter to set up Matplotlib using Jupyter's own backend
-# For this script and project, the command $ pip install matplotlib was used in a Python virtual environment
-housing.hist(bins=50, figsize=(20,15)) # hist() to plot a histogram for each numerical attribute
-plt.show()
+    # Use the describe() method to see the summary of the numerical attributes
+    housing.describe()
+
+    # Use %matplotlib inline to run in a separate cell in a Jupyter notebook environment (not in a script) as it tells Jupyter to set up Matplotlib using Jupyter's own backend
+    # For this script and project, the command $ pip install matplotlib was used in a Python virtual environment
+    housing.hist(bins=50, figsize=(20,15)) # hist() to plot a histogram for each numerical attribute
+    plt.show()
+
+review_data(housing)
 
 ############################## Part 2 - Create a test set ############################################
 
@@ -85,36 +88,50 @@ plt.show()
 # --> $ %pip install scikit-learn to install it in a Jupyter notebook for using sklearn dependencies in any cell
 
 # Use train_test_split of sklearn module to split the data into 20% test and 80% train
-train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
+def test_set(housing):
+    train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
 
-# Check the amount of districts (data points) for each of the 2 sets
-len(train_set) # 80% of overall data = 16512
-len(test_set) # 20% of overall data = 4128
+    # Check the amount of districts (data points) for each of the 2 sets
+    len(train_set) # 80% of overall data = 16512
+    len(test_set) # 20% of overall data = 4128
 
-# Suppose the median_income attribute (continuous numerical) is very important to predict median housing prices
-# Create an income category attribute with 5 categories labelled from 1 to 5
-housing["income_cat"] = pd.cut(housing["median_income"],
-                                       bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
-                                       labels=[1,2,3,4,5])
+    # Suppose the median_income attribute (continuous numerical) is very important to predict median housing prices
+    # Create an income category attribute with 5 categories labelled from 1 to 5
+    housing["income_cat"] = pd.cut(housing["median_income"],
+                                        bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
+                                        labels=[1,2,3,4,5])
 
-# np.inf is NumPy's way to consider all income values above $60,000 to infinity
+    # np.inf is NumPy's way to consider all income values above $60,000 to infinity
 
-# Plot histogram of income categories
-housing["income_cat"].hist()
+    # Plot histogram of income categories
+    housing["income_cat"].hist()
+    
+    return housing
+
+test_set(housing)
 
 # Perform stratified sampling based on the income category using Scikit-Learn's StratifiedShuffleSplit class imported earlier
-split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-for train_index, test_index in split.split(housing, housing["income_cat"]):
-    # Extract the rows corresponding to the training and test indices
-    strat_train_set = housing.loc[train_index]
-    strat_test_set = housing.loc[test_index]
+def stratified_sampling(housing):
+    split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+    for train_index, test_index in split.split(housing, housing["income_cat"]):
+        # Extract the rows corresponding to the training and test indices
+        strat_train_set = housing.iloc[train_index]
+        strat_test_set = housing.iloc[test_index]
 
-# Checks the proportion of each income category in the stratified test set
-strat_test_set["income_cat"].value_counts() / len(strat_test_set)
+    # Check the proportion of each income category in the stratified test set
+    strat_test_set["income_cat"].value_counts() / len(strat_test_set)
 
-# Remove the income_cat attribute so the data is back to its original state
-for set_ in (strat_train_set, strat_test_set):
-    set_.drop("income_cat", axis=1, inplace=True)
+    # Remove the income_cat attribute so the data is back to its original state
+    for set_ in (strat_train_set, strat_test_set):
+        # set_.drop("income_cat", axis=1, inplace=True)
+        # set_ = housing[some_condition].copy()
+        set_ = set_.drop("income_cat", axis=1)
+
+
+    return strat_train_set, strat_test_set
+
+strat_train_set, strat_test_set = stratified_sampling(housing)
+
 
 ################################## Part 3 - Discover and Visualise the Data to Gain Insights ###################################
 
@@ -124,50 +141,64 @@ housing = strat_train_set.copy()
 
 # 1. Visualising Geographical data
 # Create a scatterplot of all districts to visualise the data since there is geographical info (latitude and longitude attributes)
-housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1) # alpha=0.1 makes it easier to visualise the places where there is a high density of data points
+def visualise_geodata(housing):
+    housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1) # alpha=0.1 makes it easier to visualise the places where there is a high density of data points
 
-# Make the patterns more stand out by adding more parameters and colourfully visualise 'median_house_value'
-# 's' (the radius of each circle) shows the district's population, 'c' (color) represents the price,
-# 'cmap' to use a predefined color map (ie. 'jet') and it ranges from blue (low values) to red (high prices)
-housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
-             s=housing["population"]/100, label="population", figsize=(10,7),
-             c="median_house_value", cmap=plt.get_cmap("jet"), colorbar=True,
-)
-plt.legend()
+    # Make the patterns more stand out by adding more parameters and colourfully visualise 'median_house_value'
+    # 's' (the radius of each circle) shows the district's population, 'c' (color) represents the price,
+    # 'cmap' to use a predefined color map (ie. 'jet') and it ranges from blue (low values) to red (high prices)
+    housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
+                s=housing["population"]/100, label="population", figsize=(10,7),
+                c="median_house_value", cmap=plt.get_cmap("jet"), colorbar=True,
+    )
+    plt.legend()
 
-# 2. Looking for Correlations
+# Call the visualise_geodata() to see all relevant output
+visualise_geodata(housing)
 
-# Select only numerical columns for correlation
-numerical_housing = housing.select_dtypes(include=[np.number])
+def observe_correlations(housing):
+    # Select only numerical columns for correlation
+    numerical_housing = housing.select_dtypes(include=[np.number])
 
-# Compute the 'standard correlation coefficient' (Pearsons's r) between every pair of attributes using the corr() method
-corr_matrix = numerical_housing.corr()
+    # Compute the 'standard correlation coefficient' (Pearsons's r) between every pair of attributes using the corr() method
+    corr_matrix = numerical_housing.corr()
 
-# display the correlation matrix
-corr_matrix["median_house_value"].sort_values(ascending=False)
+    # display the correlation matrix
+    return corr_matrix["median_house_value"].sort_values(ascending=False)
+
+# Call the observe_correlations() function to see all relevant output
+observe_correlations(housing)
 
 # Another way to check the correlation between attributes is to use pandas scatter_matrix() function
 # It plots every numerical attribute against every other numerical attribute.
 
 # 11 numerical attributes = 11^2=121 plots will not fit on a page
 # So focus on only 4 main attributes that seem most correlated with the median housing value
-attributes = ["median_house_value", "median_income", "total_rooms", "housing_median_age"]
-scatter_matrix(housing[attributes], figsize=(12,8))
+def plot_scatter_matrix(housing):
+    attributes = ["median_house_value", "median_income", "total_rooms", "housing_median_age"]
+    scatter_matrix(housing[attributes], figsize=(12,8))
 
-# From above scatter matrix, it looks like the most important attribute to predict the median house value is median income so zoom in on its correlation scatterplot
-housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
+    # From above scatter matrix, it looks like the most important attribute to predict the median house value is median income so zoom in on its correlation scatterplot
+    housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
 
-
-# 3. Experimenting with Attribute Combinations
+# Call the scatter_matrix() function to see all relevant scatter_matrix
+plot_scatter_matrix(housing)
 
 # Before preparing the data for ML algorithms, try various attribute combinations
 
 # eg. total rooms in a district is not useful if you don't know how many households there are, so you want total rooms per household
-housing["rooms_per_household"] = housing["total_rooms"]/housing["households"]
-housing["bedrooms_per_room"] = housing["total_bedrooms"]/housing["total_rooms"]
-housing["population_per_household"] = housing["population"]/housing["households"]
+def attribute_combinations(housing):
+    housing["rooms_per_household"] = housing["total_rooms"]/housing["households"]
+    housing["bedrooms_per_room"] = housing["total_bedrooms"]/housing["total_rooms"]
+    housing["population_per_household"] = housing["population"]/housing["households"]
 
-# look at correlation matrix again
-numerical_housing = housing.select_dtypes(include=[np.number])
-corr_matrix = numerical_housing.corr()
-corr_matrix["median_house_value"].sort_values(ascending=False)
+    # look at correlation matrix again
+    numerical_housing = housing.select_dtypes(include=[np.number])
+    corr_matrix = numerical_housing.corr()
+    return corr_matrix["median_house_value"].sort_values(ascending=False)
+
+# Call the attribute_combinations() function to see all attributes after adding new ones
+attribute_combinations(housing)
+
+
+################################ Part 4 - Prepare the Data for Machine Learning Algorithms ###################################
