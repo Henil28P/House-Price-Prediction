@@ -15,6 +15,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from pandas.plotting import scatter_matrix
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import OneHotEncoder
 # import seaborn as sbn
 import os
 import tarfile
@@ -256,7 +257,20 @@ def handle_text_attributes(housing):
     housing_cat_encoded[:10]
 
     # get list of categories which is a list containing a 1D array of categories for each categoricaal attribute
-    return ordinal_encoder.categories_
+    ordinal_encoder.categories_
     # return ordinal_encoder
+    
+    # 2. One-hot encoding: use sklearn's OneHotEncoder class of its 'preproccessing' module
+    # Convert categorical values into one-hot vectors
+    cat_encoder = OneHotEncoder()
+    housing_cat_1hot = cat_encoder.fit_transform(housing_cat)
+    housing_cat_1hot # output will be SciPy sparse matrix instead of a NumPy array
+    # Sparse matrix only stores the location of the nonzero elements which saves tons of memory
+    
+    # Convert the above sparse matrix to a (dense) NumPy array with toarray() method
+    housing_cat_1hot.toarray()
+    
+    # both will have same output of list of categories
+    return ordinal_encoder.categories_, cat_encoder.categories_
 
 handle_text_attributes(housing)
